@@ -183,6 +183,4 @@ class ressf {
             return $this->checkUserAgent($match[1], true);
         }
     }
-    
-    
 }

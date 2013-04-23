@@ -9,6 +9,7 @@ trait validators
      */
     private $baseTags = array(
         'desktop',
+        'phone',
         'tablet',
         'mobile',
         'tv',
@@ -22,6 +23,24 @@ trait validators
     public function isDesktop()
     {
         return $this->detect == 'desktop';
+    }
+    
+    /**
+     * Phone Validator
+     * @return bool
+     */
+    public function isPhone()
+    {
+        return $this->checkUserAgent(
+            array(
+                'iphone',
+                'ipod',
+                'android',
+                'windows mobile',
+                'windows ce',
+                'symbian',
+            )
+        );
     }
     
     /**
@@ -43,16 +62,7 @@ trait validators
      */
     public function isMobile()
     {
-        return $this->checkUserAgent(
-            array(
-                'iphone',
-                'ipod',
-                'android',
-                'windows mobile',
-                'windows ce',
-                'symbian',
-            )
-        );
+        return $this->isPhone() || $this->isTablet();
     }
     
     /**
