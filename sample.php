@@ -1,5 +1,5 @@
 <?php
-require_once('library/render.php');
+require_once('library/ressf.php');
 
 ob_start();
 include('content/text.phtml');
