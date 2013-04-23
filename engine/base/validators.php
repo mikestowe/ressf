@@ -3,6 +3,10 @@ namespace ressf\base;
 
 trait validators
 {
+    /**
+     * Base Validators
+     * @var array
+     */
     private $baseTags = array(
         'desktop',
         'tablet',
@@ -11,11 +15,19 @@ trait validators
         'game'
     );
     
+    /**
+     * Desktop Validator
+     * @return bool
+     */
     public function isDesktop()
     {
         return $this->detect == 'desktop';
     }
     
+    /**
+     * Tablet Validator
+     * @return bool
+     */
     public function isTablet()
     {
         return $this->checkUserAgent(
@@ -25,6 +37,10 @@ trait validators
         );
     }
     
+    /**
+     * Mobile Validator
+     * @return bool
+     */
     public function isMobile()
     {
         return $this->checkUserAgent(
@@ -39,6 +55,10 @@ trait validators
         );
     }
     
+    /**
+     * TV Validator
+     * @return bool
+     */
     public function isTv()
     {
         return $this->checkUserAgent(
@@ -49,6 +69,10 @@ trait validators
         );
     }
     
+    /**
+     * Game Validator
+     * @return bool
+     */
     public function isGame()
     {
         return $this->checkUserAgent(

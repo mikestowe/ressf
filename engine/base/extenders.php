@@ -3,12 +3,20 @@ namespace ressf\base;
 
 trait extenders
 {
+    /**
+     * Base Extenders (default)
+     * @var array
+     */
     private $baseExtenders = array(
-        'cache' => false,
-        'cacheType' => 'apc',
+        'apcCache' => false,
     );
     
-    public function setCache($cache = 'false') {
+    /**
+     * Set Cache Extender
+     * @param string
+     * @return void
+     */
+    public function setApcCache($cache = 'false') {
         $base = $this;
         
         $this->extenders['cache'] = array(
@@ -32,18 +40,4 @@ trait extenders
             }
         });
     }
-    
-    
-    
-    
-    public function sestCache($cache = 'false')
-    {
-        $this->extenders['cache'] = ($cache != 'false' && $cache != '0');
-    }
-    
-    public function setCacheType($type = 'apc')
-    {
-        $this->extenders['cacheType'] = $type;
-    }
-    
 }

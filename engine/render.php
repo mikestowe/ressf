@@ -16,15 +16,31 @@ class ressf {
      */
     private $detect = null;
     
+    /**
+     * Extender Actions
+     * @var array
+     */
     private $actions = array(
         'beforeRender' => array(),
         'afterRender'  => array(),
     );
     
+    /**
+     * View Contents
+     * @var string
+     */
     private $view;
     
+    /**
+     * Kill Process Switch
+     * @var bool
+     */
     private $killProcess = false;
     
+    /**
+     * Construct
+     * @return \ressf
+     */
     public function __construct()
     {
         $this->tags = array_merge($this->baseTags, $this->tags);
@@ -119,6 +135,12 @@ class ressf {
         }
     }
     
+    /**
+     * Add Extender Action
+     * @param string
+     * @param mixed
+     * @return \ressf
+     */
     public function addAction($hook, $function)
     {
         $this->actions[$hook][] = $function;
@@ -143,7 +165,7 @@ class ressf {
         $userAgent = $_SERVER['HTTP_USER_AGENT'];
         
         if ($textOnly) {
-            $userAgent = str_replace(array(' ', '.', '-',), '', $userAgent);
+            $userAgent = str_replace(array(' ', '.', '-', '/',), '', $userAgent);
         }
         
         return (bool) preg_match('/' . $agent . '/i', $userAgent);
