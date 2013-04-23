@@ -183,6 +183,6 @@ class ressf {
             return $this->checkUserAgent($match[1], true);
         }
         
-        throw new \Exception('Called ' . $method . ' is not defined');
+        throw new \Exception('The method "' . $method . '" does not exist.');
     }
 }
