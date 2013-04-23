@@ -182,5 +182,7 @@ class ressf {
         if (preg_match('/^is([A-Z][A-Za-z]+)$/', $function, $match)) {
             return $this->checkUserAgent($match[1], true);
         }
+        
+        throw new \Exception('Called ' . $method . ' is not defined');
     }
 }
