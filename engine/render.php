@@ -1,13 +1,35 @@
 <?php
-require_once('validators.php');
-require_once('extenders.php');
+require_once('base/validators.php');
+require_once('base/extenders.php');
+require_once('plugins/validators.php');
+require_once('plugins/extenders.php');
 
 class ressf {
-    use ressf\validators;
-    use ressf\extenders;
+    use ressf\base\validators;
+    use ressf\base\extenders;
+    use ressf\plugins\validators;
+    use ressf\plugins\extenders;
     
-    // Display type
+    /**
+     *  Display type
+     * @var string
+     */
     private $detect = null;
+    
+    private $actions = array(
+        'beforeRender' => array(),
+        'afterRender'  => array(),
+    );
+    
+    private $view;
+    
+    private $killProcess = false;
+    
+    public function __construct()
+    {
+        $this->tags = array_merge($this->baseTags, $this->tags);
+        $this->extenders = array_merge($this->baseExtenders, $this->extenders);
+    }
     
     /**
      * Detect Screen Type
@@ -41,18 +63,15 @@ class ressf {
      */
     public function render($view)
     {
-        // Handle Extenders
-        $view = $this->handleExtenders($view);
+        $this->view = $view;
         
-        // Get from Cache
-        if ($this->extenders['cache'] && $this->extenders['cacheType'] == 'apc') {
-            die('cache');
-            $cacheKey = $this->detect() . '_' . md5($view);
-            $cachedView = apc_fetch($cacheKey, $isCached);
-            
-            if ($isCached) {
-                return $cachedView;
-            }
+        // Handle Extenders
+        $this->handleExtenders('retrieve');
+        $this->handleExtenders('beforeRender');
+        
+        // Output now and escape (used by cache)
+        if ($this->killProcess) {
+            return $this->view;
         }
         
         // Handle Tags
@@ -60,17 +79,15 @@ class ressf {
         unset($tags[array_search($this->detect(), $tags)]);
         
         foreach($tags as $tag) {
-            $view = preg_replace('/\['.$tag.'\].+\[\/'.$tag.'\]/', '', $view);
+            $this->view = preg_replace('/\['.$tag.'\].+\[\/'.$tag.'\]/', '', $this->view);
         }
         
-        $view = preg_replace('/\[(\/)?' . $this->detect() . '\]/', '', $view);
+        $this->view = preg_replace('/\[(\/)?' . $this->detect() . '\]/', '', $this->view);
         
-        // Save in Cache
-        if ($this->extenders['cache'] && $this->extenders['cacheType'] == 'apc') {
-            apc_add($cacheKey, $view);
-        }
+        // Handle Extenders
+        $this->handleExtenders('afterRender');
         
-        return $view;
+        return $this->view;
     }
     
     /**
@@ -78,16 +95,34 @@ class ressf {
      * @param string
      * @return string
      */
-    private function handleExtenders($view)
+    private function handleExtenders($action)
     {
-        preg_match_all('/\[ressf:([a-z]+)=([^\]]+)]/', $view, $matches);
-        
-        for ($i = 0; $i < count($matches[0]); $i++) {
-            $this->{'set' . ucfirst($matches[1][$i])}($matches[2][$i]);
-            $view = str_replace($matches[0][$i], '', $view);
+        if ($action == 'retrieve') {
+            preg_match_all('/\[ressf:([a-z]+)=([^\]]+)]/', $this->view, $matches);
+            
+            for ($i = 0; $i < count($matches[0]); $i++) {
+                $this->{'set' . ucfirst($matches[1][$i])}($matches[2][$i]);
+                $this->view = str_replace($matches[0][$i], '', $this->view);
+            }
         }
         
-        return $view;
+        if ($action == 'beforeRender') {
+            foreach ($this->actions['beforeRender'] as $function) {
+                $function();
+            }
+        }
+        
+        if ($action == 'afterRender') {
+            foreach ($this->actions['afterRender'] as $function) {
+                $function();
+            }
+        }
+    }
+    
+    public function addAction($hook, $function)
+    {
+        $this->actions[$hook][] = $function;
+        return $this;
     }
     
     /**
@@ -95,7 +130,7 @@ class ressf {
      * @param string
      * @return bool
      */
-    public function checkUserAgent($agent)
+    public function checkUserAgent($agent, $textOnly = false)
     {
         if (is_array($agent)) {
             $agent = implode('|', $agent);
@@ -105,7 +140,13 @@ class ressf {
             return false;
         }
         
-        return (bool) preg_match('/' . $agent . '/i', $_SERVER['HTTP_USER_AGENT']);
+        $userAgent = $_SERVER['HTTP_USER_AGENT'];
+        
+        if ($textOnly) {
+            $userAgent = str_replace(array(' ', '.', '-',), '', $userAgent);
+        }
+        
+        return (bool) preg_match('/' . $agent . '/i', $userAgent);
     }
     
     /**
@@ -117,7 +158,7 @@ class ressf {
     public function __call($function, $params)
     {
         if (preg_match('/^is([A-Z][A-Za-z]+)$/', $function, $match)) {
-            return $this->checkUserAgent($match[1]);
+            return $this->checkUserAgent($match[1], true);
         }
     }
     

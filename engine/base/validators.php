@@ -1,9 +1,9 @@
 <?php
-namespace ressf;
+namespace ressf\base;
 
 trait validators
 {
-    private $tags = array(
+    private $baseTags = array(
         'desktop',
         'tablet',
         'mobile',
