@@ -2,7 +2,7 @@
 require_once('library/render.php');
 
 ob_start();
-include('views/sample.phtml');
+include('content/text.phtml');
 $contents = ob_get_contents();
 ob_end_clean();
 
