@@ -114,7 +114,7 @@ class ressf {
     private function handleExtenders($action)
     {
         if ($action == 'retrieve') {
-            preg_match_all('/\[ressf:([a-z]+)=([^\]]+)]/', $this->view, $matches);
+            preg_match_all('/\[ressf:([A-Za-z]+)=([^\]]+)]/', $this->view, $matches);
             
             for ($i = 0; $i < count($matches[0]); $i++) {
                 $this->{'set' . ucfirst($matches[1][$i])}($matches[2][$i]);
