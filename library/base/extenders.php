@@ -1,6 +1,21 @@
 <?php
+/**
+ * ressf
+ * The open source RESS Framework for content manipulation
+ * 
+ * @author  Mike Stowe
+ * @link    http://www.mikestowe.com
+ * @link    https://github.com/mikestowe/ressf
+ * @license GPL
+ */
+
 namespace ressf\base;
 
+/**
+ * Base Extender Trait
+ * @package  ressf
+ * @category ressf/base
+ */
 trait extenders
 {
     /**

@@ -1,9 +1,22 @@
 <?php
+/**
+ * ressf
+ * The open source RESS Framework for content manipulation
+ * 
+ * @author  Mike Stowe
+ * @link    http://www.mikestowe.com
+ * @link    https://github.com/mikestowe/ressf
+ * @license GPL
+ */
 require_once('base/validators.php');
 require_once('base/extenders.php');
 require_once('plugins/validators.php');
 require_once('plugins/extenders.php');
 
+/**
+ * @package  ressf
+ * @category ressf
+ */
 class ressf {
     use ressf\base\validators;
     use ressf\base\extenders;
