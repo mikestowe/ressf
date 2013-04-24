@@ -193,7 +193,7 @@ class ressf {
     public function __call($function, $params)
     {
         if (preg_match('/^is([A-Z][A-Za-z]+)$/', $function, $match)) {
-            return $this->checkUserAgent($match[1], true);
+            return self::checkUserAgent($match[1], true);
         }
         
         throw new \Exception('The method "' . $method . '" does not exist.');
