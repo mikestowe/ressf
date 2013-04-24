@@ -33,12 +33,26 @@ trait validators
     {
         return $this->checkUserAgent(
             array(
+                'mobile',
                 'iphone',
                 'ipod',
-                'android',
+                'android(?=.*mobile)',
+                'blackberry',
+                'iemobile',
                 'windows mobile',
                 'windows ce',
                 'symbian',
+                'hpwOS',
+                'webOS'
+                'fennec',
+                'minimo',
+                'opera mini',
+                'opera mobi',
+                'blazer',
+                'dolfin',
+                'dolphin',
+                'skyfire',
+                'zune',
             )
         );
     }
@@ -52,6 +66,8 @@ trait validators
         return $this->checkUserAgent(
             array(
                 'ipad',
+                'kindle',
+                'android(?!.*mobile)',
             )
         );
     }
@@ -73,6 +89,10 @@ trait validators
     {
         return $this->checkUserAgent(
             array(
+                'tv', // smart-tv, appletv, googletv
+                'roku',
+                'dvp',
+                'rca',
                 'vizio',
                 'lg',
             )
@@ -88,6 +108,9 @@ trait validators
         return $this->checkUserAgent(
             array(
                 'xbox',
+                'psp',
+                'playstation',
+                'nintendo',
             )
         );
     }
