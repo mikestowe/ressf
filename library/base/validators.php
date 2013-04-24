@@ -9,9 +9,8 @@ trait validators
      */
     private $baseTags = array(
         'desktop',
-        'phone',
-        'tablet',
         'mobile',
+        'tablet',
         'tv',
         'game'
     );
@@ -29,7 +28,7 @@ trait validators
      * Phone Validator
      * @return bool
      */
-    public function isPhone()
+    public function isMobile()
     {
         return $this->checkUserAgent(
             array(
@@ -70,15 +69,6 @@ trait validators
                 'android(?!.*mobile)',
             )
         );
-    }
-    
-    /**
-     * Mobile Validator
-     * @return bool
-     */
-    public function isMobile()
-    {
-        return $this->isPhone() || $this->isTablet();
     }
     
     /**
