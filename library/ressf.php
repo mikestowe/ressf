@@ -152,7 +152,7 @@ class ressf {
      * @param string
      * @return bool
      */
-    public function checkUserAgent($agent, $textOnly = false)
+    public static function checkUserAgent($agent, $textOnly = false)
     {
         if (is_array($agent)) {
             $agent = implode('|', $agent);
@@ -169,6 +169,19 @@ class ressf {
         }
         
         return (bool) preg_match('/' . $agent . '/i', $userAgent);
+    }
+    
+        
+    /**
+     * Allow methods to be called statically
+     * @param string
+     * @param array
+     * @return mixed
+     */
+    static public function convertStatic($function, $params) {
+        $ressf = new ressf();
+        $ressf->detect();
+        return $ressf->$function($params);
     }
     
     /**

@@ -9,4 +9,9 @@ ob_end_clean();
 $ressf = new ressf();
 echo $ressf->render($contents);
 
+echo '<hr />';
+
+echo 'Static Call: <br />';
+echo 'Desktop: ' . (ressf::isDesktop() ? 'true' : 'false') . '<br />';
+echo 'Phone: ' . (ressf::isMobile() ? 'true' : 'false') . '<br />';
 ?>

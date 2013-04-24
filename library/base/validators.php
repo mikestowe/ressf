@@ -21,6 +21,10 @@ trait validators
      */
     public function isDesktop()
     {
+        if (!isset($this)) {
+            return self::convertStatic(__FUNCTION__, array());
+        }
+        
         return $this->detect == 'desktop';
     }
     
@@ -30,7 +34,7 @@ trait validators
      */
     public function isMobile()
     {
-        return $this->checkUserAgent(
+        return self::checkUserAgent(
             array(
                 'mobile',
                 'iphone',
@@ -42,7 +46,7 @@ trait validators
                 'windows ce',
                 'symbian',
                 'hpwOS',
-                'webOS'
+                'webOS',
                 'fennec',
                 'minimo',
                 'opera mini',
@@ -62,7 +66,7 @@ trait validators
      */
     public function isTablet()
     {
-        return $this->checkUserAgent(
+        return self::checkUserAgent(
             array(
                 'ipad',
                 'kindle',
@@ -77,7 +81,7 @@ trait validators
      */
     public function isTv()
     {
-        return $this->checkUserAgent(
+        return self::checkUserAgent(
             array(
                 'tv', // smart-tv, appletv, googletv
                 'roku',
@@ -95,7 +99,7 @@ trait validators
      */
     public function isGame()
     {
-        return $this->checkUserAgent(
+        return self::checkUserAgent(
             array(
                 'xbox',
                 'psp',
