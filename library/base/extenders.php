@@ -3,26 +3,33 @@
  * ressf
  * The open source RESS Framework for content manipulation
  * 
+ * 5.3 Version - 
+ * This version of ressf is designed to be backwards compatible
+ * for users not runnning PHP 5.4.  There are no warranties expressed
+ * or implied, and users should understand that this version is not 
+ * updated as frequently or tested as thoroughly.  As such, it is 
+ * highly recommended to upgrade to the 5.4 version as soon as
+ * practical.
+ * 
  * @author  Mike Stowe
  * @link    http://www.mikestowe.com
  * @link    https://github.com/mikestowe/ressf
  * @license GPL
  */
-
 namespace ressf\base;
-
+use \ressf;
 /**
  * Base Extender Trait
  * @package  ressf
  * @category ressf/base
  */
-trait extenders
+class extenders
 {
     /**
      * Base Extenders (default)
      * @var array
      */
-    private $baseExtenders = array(
+    public $baseExtenders = array(
         'apcCache' => false,
     );
     
@@ -32,26 +39,28 @@ trait extenders
      * @return void
      */
     public function setApcCache($cache = 'false') {
-        $base = $this;
+        $base = $this->ressf;
         
-        $this->extenders['cache'] = array(
+        $base->setExtenders('cache', array(
             'doCache' => ($cache != 'false' && $cache != '0'),
-            'md5'     => $base->detect() . '_' . md5($base->view),
-        );
+            'md5'     => $base->detect() . '_' . md5($base->getView()),
+        ));
         
-        self::addAction('beforeRender', function() use ($base) {
-            if ($base->extenders['cache']['doCache']) {
-                $cachedView = apc_fetch($base->extenders['cache']['md5'], $isCached);
+        ressf::addAction('beforeRender', function() use ($base) {
+            $config = $base->getExtenders('cache');
+            if ($config['doCache']) {
+                $cachedView = apc_fetch($config['md5'], $isCached);
                 if ($isCached) {
-                    $base->view = $cachedView;
-                    $base->killProcess = true;
+                    $base->setView($cachedView);
+                    $base->setKillProcess(true);
                 }
             }
         });
         
-        self::addAction('afterRender', function() use ($base) {
-            if ($base->extenders['cache']['doCache']) {
-                apc_add($base->extenders['cache']['md5'], $base->view);
+        ressf::addAction('afterRender', function() use ($base) {
+            $config = $base->getExtenders('cache');
+            if ($config['doCache']) {
+                apc_add($config['md5'], $base->getView());
             }
         });
     }

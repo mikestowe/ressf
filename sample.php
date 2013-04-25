@@ -12,6 +12,6 @@ echo $ressf->render($contents);
 echo '<hr />';
 
 echo 'Static Call: <br />';
-echo 'Desktop: ' . (ressf::isDesktop() ? 'true' : 'false') . '<br />';
-echo 'Phone: ' . (ressf::isMobile() ? 'true' : 'false') . '<br />';
+echo 'Desktop: ' . ($ressf->getValidatorsClass()->isDesktop() ? 'true' : 'false') . '<br />';
+echo 'Phone: ' . ($ressf->getValidatorsClass()->isMobile() ? 'true' : 'false') . '<br />';
 ?>

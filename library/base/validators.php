@@ -3,6 +3,14 @@
  * ressf
  * The open source RESS Framework for content manipulation
  * 
+ * 5.3 Version - 
+ * This version of ressf is designed to be backwards compatible
+ * for users not runnning PHP 5.4.  There are no warranties expressed
+ * or implied, and users should understand that this version is not 
+ * updated as frequently or tested as thoroughly.  As such, it is 
+ * highly recommended to upgrade to the 5.4 version as soon as
+ * practical.
+ * 
  * @author  Mike Stowe
  * @link    http://www.mikestowe.com
  * @link    https://github.com/mikestowe/ressf
@@ -10,19 +18,20 @@
  */
 
 namespace ressf\base;
+use \ressf;
 
 /**
  * Base Validator Trait
  * @package  ressf
  * @category ressf/base
  */
-trait validators
+class validators
 {
     /**
      * Base Validators
      * @var array
      */
-    private $baseTags = array(
+    public $baseTags = array(
         'desktop',
         'mobile',
         'tablet',
@@ -37,10 +46,10 @@ trait validators
     public function isDesktop()
     {
         if (!isset($this)) {
-            return self::convertStatic(__FUNCTION__, array());
+            return ressf::convertStatic(__FUNCTION__, array());
         }
         
-        return $this->detect == 'desktop';
+        return $this->ressf->detect() == 'desktop';
     }
     
     /**
@@ -49,7 +58,7 @@ trait validators
      */
     public function isMobile()
     {
-        return self::checkUserAgent(
+        return ressf::checkUserAgent(
             array(
                 'mobile',
                 'iphone',
@@ -81,7 +90,7 @@ trait validators
      */
     public function isTablet()
     {
-        return self::checkUserAgent(
+        return ressf::checkUserAgent(
             array(
                 'ipad',
                 'kindle',
@@ -96,7 +105,7 @@ trait validators
      */
     public function isTv()
     {
-        return self::checkUserAgent(
+        return ressf::checkUserAgent(
             array(
                 'tv', // smart-tv, appletv, googletv
                 'roku',
@@ -114,7 +123,7 @@ trait validators
      */
     public function isGame()
     {
-        return self::checkUserAgent(
+        return ressf::checkUserAgent(
             array(
                 'xbox',
                 'psp',
