@@ -209,6 +209,6 @@ class ressf {
             return self::checkUserAgent($match[1], true);
         }
         
-        throw new \Exception('The method "' . $method . '" does not exist.');
+        throw new \Exception('The method "' . $function . '" does not exist.');
     }
 }
